@@ -18,7 +18,9 @@ typedef struct DictElem_
 
 typedef struct FreqDict_
 {
-    DictElem* lookupTable[52][53];
+    // DictElem* lookupTable[52][53];
+    DictElem* firstWord;
+    DictElem* lastWord;
     int wordCnt;
 } FreqDict;
 
@@ -28,7 +30,8 @@ typedef struct FreqDict_
 ////////////////////////////////////////////////////////////
 
 FreqDict* DictInit();
-void DictAddWord(FreqDict*, char*, int);
+DictElem* WordInit(char*);
+void DictAddWord(FreqDict*, char*);
 DictElem* DictFindWord(FreqDict*, char*);
 int LexiCompare(char*, char*);
 
@@ -39,51 +42,122 @@ int LexiCompare(char*, char*);
 FreqDict* DictInit()
 {
     FreqDict* pDict = (FreqDict*)malloc(sizeof(FreqDict));
-    int first, second;
-    for (first = 0; first < 52; first++)
-        for (second = 0; second < 53; second++)
-            pDict->lookupTable[first][second] = NULL;
+    // int first, second;
+    // for (first = 0; first < 52; first++)
+    //     for (second = 0; second < 53; second++)
+    //         pDict->lookupTable[first][second] = NULL;
+    pDict->firstWord = pDict->lastWord = NULL;
     pDict->wordCnt = 0;
     return pDict;
 }
 
-// Add word to dictionary
-void DictAddWord(FreqDict* dict, char* buf, int len)
+// Initialize word struct
+DictElem* WordInit(char* word)
 {
-    DictElem* pElem = (DictElem*)malloc(sizeof(DictElem));
+    DictElem* pNewElem = (DictElem*)malloc(sizeof(DictElem));
+    pNewElem->word = word;
+    pNewElem->frequency = 0;
+    pNewElem->next = NULL;
+    return pNewElem;
+}
 
+// Add word to dictionary
+/*
+void DictAddWord_(FreqDict* dict, char* buf)
+{
+    // Uniqueness of each word is assumed; no preliminary search will be done.
+    DictElem* pNewElem = WordInit(buf);
     // Get the indices of first and second character
     int firstCharIdx = ((buf[0] >= 'A' && buf[0] <= 'Z') ? buf[0] - 'A' :  ((buf[0] >= 'a' && buf[0] <= 'z') ? buf[0] - 'a' : -1));
     int secondCharIdx = 52;
-    if (len > 1) int secondCharIdx = ((buf[0] >= 'A' && buf[0] <= 'Z') ? buf[0] - 'A' :  ((buf[0] >= 'a' && buf[0] <= 'z') ? buf[0] - 'a' : -1));
+    if (buf[1] != '\0') int secondCharIdx = ((buf[0] >= 'A' && buf[0] <= 'Z') ? buf[0] - 'A' :  ((buf[0] >= 'a' && buf[0] <= 'z') ? buf[0] - 'a' : -1));
     
     // Get the pointer for head
     DictElem* pHead = dict->lookupTable[firstCharIdx][secondCharIdx];
-    DictElem* pElem, pNext;
+    DictElem* pElem; DictElem* pNext;
     if (pHead)
     {
         pElem = pHead;
-        while (LexiCompare())
+        pNext = pElem->next;
+        while (LexiCompare(pElem->word, buf) == 1)
+        {
+            // Case: inserting new word to the end
+            if (pNext == NULL)
+            {
+                pElem->next = pNewElem;   
+                break;
+            }
+
+            // Case: inserting new word in the middle
+            pNewElem->next = pElem->next;
+            pElem->next = pNewElem;
+        }
     }
+} */
+
+// Add word to dictionary
+void DictAddWord(FreqDict* dict, char* buf)
+{
+    char* word = (char*)malloc(sizeof(char) * (strlen(buf) + 1));
+    strcpy(word, buf);
+    DictElem* pElem = WordInit(word);
+    if (dict->firstWord == NULL)
+    {
+        dict->firstWord = pElem;
+        dict->lastWord = pElem;
+        dict->wordCnt++;
+        return;
+    }
+    dict->lastWord->next = pElem;
+    dict->lastWord = pElem;
+    dict->wordCnt++;
+    return;
 }
 
 // Find word from dictionary
+/*
 DictElem* DictFindWord(FreqDict* dict, char* query)
 {
-    int queryLen = strlen(query);
-    int cursor;
-
-    for (cursor = 0; cursor < queryLen; cursor++)
+    // Get the indices of first and second character
+    int firstCharIdx = ((query[0] >= 'A' && query[0] <= 'Z') ? query[0] - 'A' :  ((query[0] >= 'a' && query[0] <= 'z') ? query[0] - 'a' : -1));
+    int secondCharIdx = 52;
+    if (strlen(query) > 1) int secondCharIdx = ((query[0] >= 'A' && query[0] <= 'Z') ? query[0] - 'A' :  ((query[0] >= 'a' && query[0] <= 'z') ? query[0] - 'a' : -1));
+    
+    // Get the pointer in the lookup table
+    DictElem* pHead = dict->lookupTable[firstCharIdx][secondCharIdx];
+    DictElem* pElem = pHead; DictElem* pNext = pElem->next;
+    
+    // Find the word that matches the query
+    int found = 0;
+    int cmpCursor = 2;
+    for (cmpCursor = 2; cmpCursor < strlen(query); cmpCursor++)
     {
-        // If met NULL character, skip that word, since the word is ended already.
+        while (!found)
+        {
+            // Same character at same position
+            if (query[cmpCursor] == pElem->word[cmpCursor])
+            {
+                if (query[cmpCursor] == '\0') found = 1;        // Terminate search if both characters are null
+                else cmpCursor++;                               // Proceed to next position if not null
+            }
+            else if (query[cmpCursor] > pElem->word[cmpCursor])
+            {
+                pElem = pNext;
+                pNext = pNext->next;
+            }
+        }
     }
-}
+} */
 
 // Compare two words in lexicographical order
 int LexiCompare(char* str1, char* str2)
 {
     int idx = 0;
-    while (str1[idx] == str2[idx]) idx++;
+    while (str1[idx] == str2[idx])
+    {
+        if (str1[idx] == '\0') return 0;
+        idx++;
+    }
     if (str1[idx] < str2[idx]) return 1;
     else return -1;
 }
