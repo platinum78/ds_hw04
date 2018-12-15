@@ -13,14 +13,16 @@ int main(void)
 
     printf("Reading dictionary... ");
     FreqDict* dict = DictRead(dictionary);
-    DictWrite(dict, dict_output);
+    // DictWrite(dict, dict_output);
     printf("finished. \n");
 
     printf("Reading text... ");
+    int freqCnt = TextCountNum(input);
+    printf("%d \n", freqCnt);
     Text* text = TextRead(input);
-    TextWordWrite(text, output);
+    // TextWordWrite(text, output);
     printf("Finished. \n");
 
-    CountWordFrequency(dict, text);
-    TextWordWrite(text, output);
+    CountWordFrequency(output, dict, text, freqCnt);
+    // TextWordWrite(text, output);
 }

@@ -22,7 +22,15 @@ typedef struct FreqDict_
     DictElem* firstWord;
     DictElem* lastWord;
     int wordCnt;
+    int capacity;
 } FreqDict;
+
+typedef struct FreqList_
+{
+    DictElem** list;
+    int wordCnt;
+    int capacity;
+} FreqList;
 
 
 ////////////////////////////////////////////////////////////
@@ -31,9 +39,11 @@ typedef struct FreqDict_
 
 FreqDict* DictInit();
 DictElem* WordInit(char*);
+FreqList* ListInit();
 void DictAddWord(FreqDict*, char*);
 DictElem* DictFindWord(FreqDict*, char*);
-int LexiCompare(char*, char*);
+int AsciiCompare(char*, char*);
+int ListAddElem(FreqList*, DictElem*);
 
 ////////////////////////////////////////////////////////////
 // METHODS DEFINITION
@@ -61,39 +71,15 @@ DictElem* WordInit(char* word)
     return pNewElem;
 }
 
-// Add word to dictionary
-/*
-void DictAddWord_(FreqDict* dict, char* buf)
-{
-    // Uniqueness of each word is assumed; no preliminary search will be done.
-    DictElem* pNewElem = WordInit(buf);
-    // Get the indices of first and second character
-    int firstCharIdx = ((buf[0] >= 'A' && buf[0] <= 'Z') ? buf[0] - 'A' :  ((buf[0] >= 'a' && buf[0] <= 'z') ? buf[0] - 'a' : -1));
-    int secondCharIdx = 52;
-    if (buf[1] != '\0') int secondCharIdx = ((buf[0] >= 'A' && buf[0] <= 'Z') ? buf[0] - 'A' :  ((buf[0] >= 'a' && buf[0] <= 'z') ? buf[0] - 'a' : -1));
-    
-    // Get the pointer for head
-    DictElem* pHead = dict->lookupTable[firstCharIdx][secondCharIdx];
-    DictElem* pElem; DictElem* pNext;
-    if (pHead)
-    {
-        pElem = pHead;
-        pNext = pElem->next;
-        while (LexiCompare(pElem->word, buf) == 1)
-        {
-            // Case: inserting new word to the end
-            if (pNext == NULL)
-            {
-                pElem->next = pNewElem;   
-                break;
-            }
 
-            // Case: inserting new word in the middle
-            pNewElem->next = pElem->next;
-            pElem->next = pNewElem;
-        }
-    }
-} */
+FreqList* ListInit()
+{
+    FreqList* pList = (FreqList*)malloc(sizeof(FreqList));
+    pList->wordCnt = 0;
+    pList->capacity = 0;
+    pList->list = (DictElem**)malloc(sizeof(DictElem*) * pList->capacity);
+    return pList;
+}
 
 // Add word to dictionary
 void DictAddWord(FreqDict* dict, char* buf)
@@ -114,43 +100,8 @@ void DictAddWord(FreqDict* dict, char* buf)
     return;
 }
 
-// Find word from dictionary
-/*
-DictElem* DictFindWord(FreqDict* dict, char* query)
-{
-    // Get the indices of first and second character
-    int firstCharIdx = ((query[0] >= 'A' && query[0] <= 'Z') ? query[0] - 'A' :  ((query[0] >= 'a' && query[0] <= 'z') ? query[0] - 'a' : -1));
-    int secondCharIdx = 52;
-    if (strlen(query) > 1) int secondCharIdx = ((query[0] >= 'A' && query[0] <= 'Z') ? query[0] - 'A' :  ((query[0] >= 'a' && query[0] <= 'z') ? query[0] - 'a' : -1));
-    
-    // Get the pointer in the lookup table
-    DictElem* pHead = dict->lookupTable[firstCharIdx][secondCharIdx];
-    DictElem* pElem = pHead; DictElem* pNext = pElem->next;
-    
-    // Find the word that matches the query
-    int found = 0;
-    int cmpCursor = 2;
-    for (cmpCursor = 2; cmpCursor < strlen(query); cmpCursor++)
-    {
-        while (!found)
-        {
-            // Same character at same position
-            if (query[cmpCursor] == pElem->word[cmpCursor])
-            {
-                if (query[cmpCursor] == '\0') found = 1;        // Terminate search if both characters are null
-                else cmpCursor++;                               // Proceed to next position if not null
-            }
-            else if (query[cmpCursor] > pElem->word[cmpCursor])
-            {
-                pElem = pNext;
-                pNext = pNext->next;
-            }
-        }
-    }
-} */
-
 // Compare two words in lexicographical order
-int LexiCompare(char* str1, char* str2)
+int AsciiCompare(char* str1, char* str2)
 {
     int idx = 0;
     while (str1[idx] == str2[idx])
@@ -160,6 +111,32 @@ int LexiCompare(char* str1, char* str2)
     }
     if (str1[idx] < str2[idx]) return 1;
     else return -1;
+}
+
+// Add DictElem address to the frequently-used list
+int ListInsertSort(FreqList* list, DictElem* elem)
+{
+    printf("[ %s ] has nonzero frequency. \n", elem->word);
+    if (list->wordCnt)
+    {
+        int idx;
+        for (idx = list->wordCnt - 1; idx >= 0 && list->list[idx]->frequency < elem->frequency; idx--)
+            list->list[idx+1] = list->list[idx];
+        for ( ; idx >= 0 && list->list[idx]->frequency == elem->frequency && AsciiCompare(list->list[idx]->word, elem->word) == -1; idx--)
+            list->list[idx+1] = list->list[idx];
+        list->list[idx+1] = elem;
+        list->wordCnt++;
+    }
+    else
+    {
+        list->list[list->wordCnt++] = elem;
+    }
+
+    if (list->wordCnt == list->capacity)
+    {
+        list->capacity *= 2;
+        list->list = (DictElem**)realloc(list->list, sizeof(DictElem*) * list->capacity);
+    }
 }
 
 
