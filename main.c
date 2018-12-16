@@ -5,10 +5,10 @@
 int main(void)
 {
     printf("Opening file... ");
-    FILE* input = fopen("./io/input.txt", "r");
+    FILE* input = fopen("./io/hw4_input.txt", "r");
     FILE* dictionary = fopen("./io/dict.txt", "r");
-    FILE* output = fopen("./io/output.txt", "w");
-    FILE* dict_output = fopen("./io/dict_output.txt", "w");
+    FILE* output = fopen("./io/hw4_output.txt", "w");
+    // FILE* dict_output = fopen("./io/dict_output.txt", "w");
     printf("finished. \n");
 
     printf("Reading dictionary... ");

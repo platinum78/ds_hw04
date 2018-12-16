@@ -152,7 +152,7 @@ void CountWordFrequency(FILE* output, FreqDict* dict, Text* text, int num)
         cpBuf = freqList->list[idx]->word;
         idxBuf = freqList->list[idx]->frequency;
         printf("%s %d \n", cpBuf, idxBuf);
-        // fprintf(output, "%s %d \n", cpBuf, idxBuf);
+        fprintf(output, "%s %d \n", cpBuf, idxBuf);
     }
     int currentFreq = freqList->list[idx - 1]->frequency;
     for (; idx < freqList->wordCnt && freqList->list[idx]->frequency == currentFreq; idx++)
@@ -160,7 +160,7 @@ void CountWordFrequency(FILE* output, FreqDict* dict, Text* text, int num)
         cpBuf = freqList->list[idx]->word;
         idxBuf = freqList->list[idx]->frequency;
         printf("%s %d \n", cpBuf, idxBuf);
-        // fprintf(output, "%s %d \n", cpBuf, idxBuf);
+        fprintf(output, "%s %d \n", cpBuf, idxBuf);
     }
 }
 
