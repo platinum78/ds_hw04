@@ -116,7 +116,7 @@ int AsciiCompare(char* str1, char* str2)
 // Add DictElem address to the frequently-used list
 int ListInsertSort(FreqList* list, DictElem* elem)
 {
-    printf("[ %s ] has nonzero frequency. \n", elem->word);
+    // printf("[ %s ] has nonzero frequency. \n", elem->word);
     if (list->wordCnt)
     {
         int idx;

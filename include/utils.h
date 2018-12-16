@@ -117,12 +117,13 @@ void CountWordFrequency(FILE* output, FreqDict* dict, Text* text, int num)
     int dictWordCnt = dict->wordCnt; DictElem* pElem = dict->firstWord;
     int textWordCnt = text->length; TextWord* pWord = text->firstWord;
     int opCnt = 0; char firstChar_prev = '\0'; char firstChar_curr;
+    char cStrBuf[100];
     FreqList* freqList = ListInit();
+    printf("Processing... \n");
 
     while (pElem)
     {
         opCnt++;
-        if (opCnt % 10000 == 0) printf("Currently processing %d / %d \n", opCnt, dictWordCnt);
         while (pWord)
         {
             if (strinclude(pWord->word, pElem->word)) pElem->frequency++;
@@ -147,6 +148,7 @@ void CountWordFrequency(FILE* output, FreqDict* dict, Text* text, int num)
 
     int idx; int maxIter = ((freqList->wordCnt < num) ? freqList->wordCnt : num);
     int idxBuf; char* cpBuf;
+    fseek(output, 0, SEEK_SET);
     for (idx = 0; idx < maxIter; idx++)
     {
         cpBuf = freqList->list[idx]->word;
