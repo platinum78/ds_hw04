@@ -1,27 +1,3 @@
-16
+10
 $
-The family of a 7-year-old Guatemalan girl who died in U.S. Border Patrol custody is disputing an account from U.S. officials who said she had not been given food or water for days.
-
-In a statement released by lawyers, the parents of Jakelin Caal said the girl had been given food and water and appeared to be in good health as she traveled through Mexico with her father, 29-year-old Nery Gilberto Caal Cuz. The family added that Jakelin had not been traveling through the desert for days before she was taken into custody.
-
-Tekandi Paniagua, the Guatemalan consul in Del Rio, Texas, told The Associated Press that he spoke with the Jakelin's father. The consul said Nery Caal told him the group they were traveling with was dropped off in Mexico about a 90-minute walk from the border.
-
-Border Patrol officials did not immediately respond to the family's comments.
-
-The family's statement was released Saturday during a news conference in El Paso, Texas, at an immigrant shelter where Jakelin's father is staying. Her family did not attend and has asked for privacy.
-
-Jakelin and her father were seeking asylum in the U.S. and were among a large group of migrants arrested Dec. 6 near a remote border crossing in New Mexico. Hours later they were placed on a bus to the nearest Border Patrol station, but Jakelin began vomiting and eventually stopped breathing. She later died at a Texas hospital.
-
-Border Patrol officials on Friday said agents did everything they could to save the girl but that she had not had food or water for days. They added that an initial screening showed no evidence of health problems, and that her father had signed a form indicating she was in good health.
-
-But the family took issue with that form, which was in English, a language her father doesn't speak or read. He communicated with border agents in Spanish but he primarily speaks the Mayan Q'eqchi' language.
-
-"It is unacceptable for any government agency to have persons in custody sign documents in a language that they clearly do not understand," the statement said.
-
-Jakelin's family is urging authorities to conduct an "objective and thorough" investigation into the death and to determine whether officials met standards for the arrest and custody of children.
-
-A cause of death has not yet been released. A private prayer service was held in Texas on Friday so her father could see Jakelin's body before it is taken to Guatemala, said Ruben Garcia, director of the Annunciation House shelter where her father is staying.
-
-"All of us were moved by the depth of his faith and his trust that God's hand is in all of this," Garcia said.
-
-Family members in Guatemala said Caal decided to migrate with his favorite child to earn money he could send back home. Jakelin's mother and three siblings remained in San Antonio Secortez, a village of about 420 inhabitants.
+SKKU Security Lab (seclab) supports research and education in security engineering. The lab is a part of the Department of Computer Science and Engineering, College of Information and Communication Engineering, Sungkyunkwan University (SKKU).

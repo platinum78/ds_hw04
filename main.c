@@ -16,11 +16,10 @@ int main(void)
 
     printf("Reading text... ");
     int freqCnt = TextCountNum(input);
-    printf("%d \n", freqCnt);
+    printf("%d most frequent words to be displayed... ", freqCnt);
     Text* text = TextRead(input);
     printf("Finished. \n");
 
-    fprintf(output, "\n");
     CountWordFrequency(output, dict, text, freqCnt);
     fclose(input);
     fclose(dictionary);

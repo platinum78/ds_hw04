@@ -46,7 +46,7 @@ Text* TextRead(FILE* input)
     while (!feof(input))
     {
         cCharBuf = fgetc(input);
-        if (isalpha(cCharBuf)) cStrBuf[nStrCursor++] = cCharBuf;
+        if (cCharBuf != ' ') cStrBuf[nStrCursor++] = cCharBuf;
         else
         {
             cStrBuf[nStrCursor] = '\0';
@@ -120,13 +120,17 @@ void CountWordFrequency(FILE* output, FreqDict* dict, Text* text, int num)
     char cStrBuf[100];
     FreqList* freqList = ListInit();
     printf("Processing... \n");
+    int divBy100 = ((dict->wordCnt > 100) ? dict->wordCnt / 100 : dict->wordCnt);
+    int includeCnt = 0;
 
     while (pElem)
     {
         opCnt++;
+        if (opCnt % divBy100 == 0) printf("%3d %% finished... \n", opCnt / divBy100);
         while (pWord)
         {
-            if (strinclude(pWord->word, pElem->word)) pElem->frequency++;
+            includeCnt = strinclude(pWord->word, pElem->word);
+            if (includeCnt) pElem->frequency += includeCnt;
             pWord = pWord->next;
         }
         pWord = text->firstWord;
@@ -148,7 +152,7 @@ void CountWordFrequency(FILE* output, FreqDict* dict, Text* text, int num)
 
     int idx; int maxIter = ((freqList->wordCnt < num) ? freqList->wordCnt : num);
     int idxBuf; char* cpBuf;
-    fseek(output, 0, SEEK_SET);
+    // fseek(output, 0, SEEK_SET);
     for (idx = 0; idx < maxIter; idx++)
     {
         cpBuf = freqList->list[idx]->word;
@@ -180,6 +184,7 @@ int strinclude(char* str, char* substr)
     int idx;
     int str_cursor = 0;
     int substr_cursor = 0;
+    int includeCnt = 0;
     for (idx = 0; idx < str_len - substr_len + 1; idx++)
     {
         str_cursor = idx;
@@ -191,13 +196,14 @@ int strinclude(char* str, char* substr)
             if (substr[substr_cursor + 1] == '\0')
             {
                 // printf("Included! \n");
-                return 1;
+                includeCnt++;
+                break;
             }
             substr_cursor++; str_cursor++;
         }
     }
     // printf("Not included. \n");
-    return 0;
+    return includeCnt;
 }
 
 #endif

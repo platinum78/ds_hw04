@@ -76,7 +76,7 @@ FreqList* ListInit()
 {
     FreqList* pList = (FreqList*)malloc(sizeof(FreqList));
     pList->wordCnt = 0;
-    pList->capacity = 0;
+    pList->capacity = 1;
     pList->list = (DictElem**)malloc(sizeof(DictElem*) * pList->capacity);
     return pList;
 }
